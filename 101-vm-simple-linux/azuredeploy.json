@@ -43,7 +43,7 @@
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet",
     "subnetPrefix": "10.0.0.0/24",
-    "storageAccountType": "Standard_LRS",
+    "storageAccountType": "Premium_LRS",
     "publicIPAddressName": "myPublicIP",
     "publicIPAddressType": "Dynamic",
     "vmStorageAccountContainerName": "vhds",
@@ -159,7 +159,7 @@
           "dataDisks": [
             {
               "name": "datadisk1",
-              "diskSizeGB": "100",
+              "diskSizeGB": "128",
               "lun": 0,
               "vhd": {
                 "uri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'),'/',variables('dataDisk1VhdName'),'.vhd')]"
