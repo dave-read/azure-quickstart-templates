@@ -67,10 +67,10 @@
     }
   },
   "variables": {
-    "templateBaseUrl": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/kafka-ubuntu-multidisks/",
+    "templateBaseUrl": "https://raw.githubusercontent.com/dave-read/azure-quickstart-templates/master/kafka-ubuntu-multidisks/",
     "sharedTemplateUrl": "[concat(variables('templateBaseUrl'), 'shared-resources.json')]",
     "tshirtSizeSmall": {
-      "vmSize": "Standard_A1",
+      "vmSize": "Standard_DS1",
       "diskSize": 1023,
       "vmTemplate": "[concat(variables('templateBaseUrl'), 'datastore-2disk-resources.json')]",
       "zookeeperCount": 1,
@@ -88,7 +88,7 @@
       }
     },
     "tshirtSizeMedium": {
-      "vmSize": "Standard_A3",
+      "vmSize": "Standard_DS3",
       "diskSize": 1023,
       "vmTemplate": "[concat(variables('templateBaseUrl'), 'datastore-8disk-resources.json')]",
       "zookeeperCount": 3,
@@ -108,7 +108,7 @@
       }
     },
     "tshirtSizeLarge": {
-      "vmSize": "Standard_A4",
+      "vmSize": "Standard_DS4",
       "diskSize": 1023,
       "vmTemplate": "[concat(variables('templateBaseUrl'), 'datastore-16disk-resources.json')]",
       "zookeeperCount": 3,
@@ -128,7 +128,7 @@
       }
     },
     "tshirtSizeXLarge": {
-      "vmSize": "Standard_A7",
+      "vmSize": "Standard_DS13",
       "diskSize": 1023,
       "vmTemplate": "[concat(variables('templateBaseUrl'), 'datastore-16disk-resources.json')]",
       "zookeeperCount": 5,
@@ -158,12 +158,12 @@
     "osSettings": {
       "scripts": [
         "[concat(variables('templateBaseUrl'), 'kafka-cluster-install.sh')]",
-        "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/shared_scripts/ubuntu/vm-disk-utils-0.1.sh"
+        "https://raw.githubusercontent.com/dave-read/azure-quickstart-templates/master/shared_scripts/ubuntu/vm-disk-utils-0.1.sh"
       ],
       "imageReference": {
         "publisher": "Canonical",
         "offer": "UbuntuServer",
-        "sku": "14.04.2-LTS",
+        "sku": "14.04.3-LTS",
         "version": "latest"
       }
     },
