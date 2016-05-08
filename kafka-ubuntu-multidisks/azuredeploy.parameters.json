@@ -3,19 +3,19 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountNamePrefix": {
-      "value": "cgnarmstrkafkav5"
+      "value": "drkfka"
     },
     "adminUsername": {
-      "value": "adminuser"
+      "value": "dave"
     },
     "region": {
       "value": "West US"
     },
     "adminPassword": {
-      "value": "azure@1234"
+      "value": "Welcome@1"
     },
     "domainName": {
-      "value": "kafkacgnarmv5"
+      "value": "drkfka"
     },
     "jumpbox": {
       "value": "Enabled"
