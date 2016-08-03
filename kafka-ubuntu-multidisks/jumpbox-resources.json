@@ -29,7 +29,7 @@
     "nicName": "[concat(parameters('commonSettings').namespace, 'nic')]",
     "vmName": "[concat(parameters('commonSettings').namespace, 'vm')]",
     "publicIpName": "[concat(parameters('commonSettings').namespace, 'publicIp')]",
-    "vmSize": "Standard_A0"
+    "vmSize": "Standard_DS1"
   },
   "resources": [
     {
