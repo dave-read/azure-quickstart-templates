@@ -50,7 +50,7 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetName'))]",
 	  "subnetAdminRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetAdmin'))]",
     "numberOfNodes": 3,
-    "scriptBaseUrl": "https://raw.githubusercontent.com/az-cat/azure-quickstart-templates/master/elasticsearch-centos-3node/",
+    "scriptBaseUrl": "https://raw.githubusercontent.com/dave-read/azure-quickstart-templates/master/elasticsearch-centos-3node/",
     "elasticScript": "elasticinstall.py",
     "jumpboxScript" : "prep-jumpbox.ps1",
     "installScripts": [
