@@ -40,7 +40,7 @@ for cmd in cmds:
 	RunCommand(cmd)
 
 print "prep data disk for use"
-cmds=["sfdisk /dev/sdc < sdc.layout",
+cmds=["fdisk /dev/sdc < sdc.layout",
 	"mkfs -t ext4 /dev/sdc1",
 	"mkdir /data",
 	"mount /dev/sdc1 /data"]
