@@ -3,12 +3,6 @@
     "contentVersion": "1.0.0.0",
     "parameters": 
     {
-        "adminUsername": {
-            "value": "iamadmin"
-        },
-        "adminPassword": {
-            "value": "ChangeMe!"
-        },
         "vmPrefix": {
             "value": "MasterData"
         },
