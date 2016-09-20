@@ -281,7 +281,7 @@
         "typeHandlerVersion": "1.3",
         "settings": {
           "fileUris": "[variables('installScripts')]",
-          "commandToExecute": "[concat('python ',variables('elasticScript'), ' ', variables('clusterName'), ' ', variables('numberOfNodes'), ' ', concat(parameters('snapshotStorageAcct'),'–secondary'), ' ', parameters('snapshotStorageKey')) ]"
+          "commandToExecute": "/bin/bash -c hostname"
         }
       }
     },
