@@ -8,12 +8,6 @@
         "description": "Admin username"
       }
     },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Admin password"
-      }
-    },
     "vmPrefix": {
       "type": "string",
       "metadata": {
@@ -25,9 +19,15 @@
       "metadata": {
         "description": "Prefix to use for common resources"
       }
+    }, "sshKeyData": {
+      "type": "string",
+      "metadata": {
+        "description": "SSH rsa public key file as a string."
+      }
     }
   },
   "variables": {
+    "sshKeyPath": "[concat('/home/',parameters('adminUserName'),'/.ssh/authorized_keys')]",
     "apiVersion": "2015-06-15",
     "vmSize": "Standard_DS1_v2",
     "clusterName": "elasticcluster",
@@ -49,18 +49,7 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetName'))]",
 	  "subnetAdminRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetAdmin'))]",
-    "numberOfNodes": 3,
-    "scriptBaseUrl": "https://raw.githubusercontent.com/dave-read/azure-quickstart-templates/master/elasticsearch-centos-3node/",
-    "elasticScript": "elasticinstall.py",
-    "jumpboxScript" : "prep-jumpbox.ps1",
-    "installScripts": [
-        "[concat(variables('scriptBaseUrl'), variables('elasticScript'))]",
-        "[concat(variables('scriptBaseUrl'), 'sdc.layout')]"
-    ],
-    "jumpboxScripts": [
-        "[concat(variables('scriptBaseUrl'), variables('jumpboxScript'))]",
-        "[concat(variables('scriptBaseUrl'), 'get-started.ps1')]"
-    ]
+    "numberOfNodes": 3
     
   },
   "resources": [
@@ -211,8 +200,17 @@
         },
         "osProfile": {
           "computerName": "[concat(parameters('vmPrefix'), copyIndex())]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": "true",
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[parameters('sshKeyData')]"
+                }
+              ]
+            }
+          }          
         },
         "storageProfile": {
           "imageReference": {
@@ -248,28 +246,6 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('vmPrefix'), variables('networkInterfaceName'),copyindex()))]"
             }
           ]
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmPrefix'), copyindex(), '/installelasticsearch')]",
-      "apiVersion": "[variables('apiVersion')]",
-      "copy": {
-        "name": "virtualMachineExtensions",
-        "count": "[variables('numberOfNodes')]"
-      },
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmPrefix'), copyindex())]"
-      ],
-      "properties": {
-        "publisher": "Microsoft.OSTCExtensions",
-        "type": "CustomScriptForLinux",
-        "typeHandlerVersion": "1.3",
-        "settings": {
-          "fileUris": "[variables('installScripts')]",
-          "commandToExecute": "[concat('python ',variables('elasticScript'), ' ', variables('clusterName'), ' ', variables('numberOfNodes'), ' ', variables('storageName'), ' ', listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageName')) ,variables('apiVersion')).key1)]"
         }
       }
     },
@@ -321,20 +297,30 @@
         },
         "osProfile": {
           "computerName": "Jumpbox",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "adminUsername": "[parameters('adminUserName')]",
+          "linuxConfiguration": {
+            "disablePasswordAuthentication": "true",
+            "ssh": {
+              "publicKeys": [
+                {
+                  "path": "[variables('sshKeyPath')]",
+                  "keyData": "[parameters('sshKeyData')]"
+                }
+              ]
+            }
+          }          
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "MicrosoftWindowsServer",
-            "offer": "WindowsServer",
-            "sku": "2012-R2-Datacenter",
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('imageSku')]",
             "version": "latest"
           },
           "osDisk": {
             "name": "osdisk",
             "vhd": {
-              "uri": "[concat('http://',variables('storageName'),'.blob.core.windows.net/vhds/jumpbox-osdisk.vhd')]"
+              "uri": "[concat('http://',variables('storageName'),'.blob.core.windows.net/vhds/','osdisk', copyindex(), '.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -346,24 +332,6 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces','jumpboxNic')]"
             }
           ]
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "Jumpbox/PrepExtension",
-      "apiVersion": "[variables('apiVersion')]",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "Microsoft.Compute/virtualMachines/Jumpbox"
-      ],
-      "properties": {
-        "publisher": "Microsoft.Compute",
-        "type": "CustomScriptExtension",
-        "typeHandlerVersion": "1.4",
-        "settings": {
-          "fileUris": "[variables('jumpboxScripts')]",
-          "commandToExecute": "[concat('powershell.exe -ExecutionPolicy Unrestricted -File ', variables('jumpboxScript'))]"
         }
       }
     }
