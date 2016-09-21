@@ -200,6 +200,7 @@
         },
         "osProfile": {
           "computerName": "[concat(parameters('vmPrefix'), copyIndex())]",
+          "adminUsername": "[parameters('adminUserName')]",
           "linuxConfiguration": {
             "disablePasswordAuthentication": "true",
             "ssh": {
